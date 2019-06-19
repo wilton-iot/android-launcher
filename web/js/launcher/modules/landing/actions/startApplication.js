@@ -21,13 +21,13 @@ define([
 ], function(checkActionError, backendcall, conf) {
     "use strict";
 
-    return function(context, name) {
+    return function(context, params) {
         backendcall({
             module: "android-launcher/server/calls/startApplication",
-            args: [name]
+            args: [params.repoPath, params.options]
         }, function(err) {
             if (checkActionError(err)) return;
-            window.location.href = "http://127.0.0.1:" + conf.appPort;
+            window.location.href = "http://127.0.0.1:" + params.options.tcpPort;
         });
     };
 });

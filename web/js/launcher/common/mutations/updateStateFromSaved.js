@@ -15,16 +15,16 @@
  */
 
 define([
-], function() {
+    "lodash/forOwn",
+    "vue"
+], function(forOwn, Vue) {
     "use strict";
 
-    var AppActivity = Packages.wilton.android.AppActivity;
-    var Intent = Packages.android.content.Intent;
-
-    var mainActivity = Packages.wilton.android.MainActivity.INSTANCE;
-
-    return function() {
-        var intent = new Intent(mainActivity, AppActivity);
-        mainActivity.startActivity(intent);
+    return function(state, saved) {
+        forOwn(saved, function(value, key) {
+            if ("transient" !== key) {
+                Vue.set(state, key, value);
+            }
+        });
     };
 });

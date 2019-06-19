@@ -15,21 +15,19 @@
  */
 
 define([
-    "vue-require/store/checkActionError",
-    "vue-require/store/dispatch",
-    "vue-require/websocket/backendcall"
-], function(checkActionError, dispatch, backendcall) {
+], function() {
     "use strict";
 
-    return function(context, url) {
-        backendcall({
-            module: "android-launcher/server/calls/gitOperations",
-            func: "clone",
-            args: [url]
-        }, function(err) {
-            if (checkActionError(err)) return;
-            // todo: name
-            dispatch("startApplication", "app");
-        });
+    var AppService = Packages.wilton.android.AppService;
+    var Intent = Packages.android.content.Intent;
+
+    var mainActivity = Packages.wilton.android.MainActivity.INSTANCE;
+
+    return function(repoPath, launchOpts) {
+        var intent = new Intent(mainActivity, AppService);
+        intent.putExtra("wilton_repoPath", repoPath);
+        intent.putExtra("wilton_rootModuleName", launchOpts.rootModuleName);
+        intent.putExtra("wilton_startupModule", launchOpts.startupModule);
+        mainActivity.startService(intent);
     };
 });
