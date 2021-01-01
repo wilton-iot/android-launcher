@@ -14,20 +14,25 @@
  * limitations under the License.
  */
 
-define(function(require) {
-    "use strict";
+"use strict";
 
-    var Vue = require("vue");
-    var VueRouter = require("vue-router");
-    var routerHolder = require("vue-require/router/routerHolder");
+define((require) => {
+
+    const Vue = require("vue");
+    const VueRouter = require("vue-router");
+    const routerHolder = require("vue-require/router/routerHolder");
 
     Vue.use(VueRouter);
 
-    var res = new VueRouter({
-        linkActiveClass: "active",
-        linkExactActiveClass: "active",
+    const res = new VueRouter({
+        linkActiveClass: "list-group-item-secondary",
+        linkExactActiveClass: "list-group-item-secondary",
         routes: [
-            { path: "/", component: require("./modules/landing/landing") }
+            { path: "/", redirect: "/launch" },
+            { path: "/launch", component: require("./modules/launch/launch") },
+            { path: "/fetch", component: require("./modules/fetch/fetch") },
+            { path: "/browse", component: require("./modules/browse/browse") },
+            { path: "/about", component: require("./modules/about/about") }
         ]
     });
 

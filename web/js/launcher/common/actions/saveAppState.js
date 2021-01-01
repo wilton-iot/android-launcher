@@ -14,19 +14,22 @@
  * limitations under the License.
  */
 
-define([
-    "vue-require/store/checkActionError",
-    "vue-require/websocket/backendcall"
-], function(checkActionError, backendcall) {
-    "use strict";
+"use strict";
 
-    return function(context, cb) {
+define([
+    "vue-require/websocket/backendcall"
+], (backendcall) => {
+
+    return (context, cb) => {
         backendcall({
             module: "android-launcher/server/calls/appState",
             func: "save",
             args: [context.state]
-        }, function(err) {
-            if (checkActionError(err)) return;
+        }, (err) => {
+            if (null !== err) {
+                console.error(err);
+                return;
+            }
             if ("function" === typeof(cb)) {
                 cb();
             }

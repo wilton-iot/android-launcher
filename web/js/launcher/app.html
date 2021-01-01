@@ -16,11 +16,43 @@
 -->
 <div class="container-fluid">
 
-    <transition 
-        name="launcher-fade"
-        v-on:after-enter="top"
-        v-on:after-leave="top">
-        <router-view></router-view>
-    </transition>
+    <div class="row mt-2">
+        <div class="col-3 ml-3 align-self-center">
+            <h4 class="text-secondary">Wilton Launcher</h4>
+        </div>
+        <div class="col align-self-center">
+            <h2 class="text-secondary text-center">{{headerLabel}}</h2>
+        </div>
+    </div>
+
+    <hr class="mt-0 mb-0"/>
+
+    <div class="row mt-2">
+        <div class="col-3">
+            <div class="list-group">
+                <router-link class="list-group-item list-group-item-action" to="/launch">
+                    Launch
+                </router-link>
+                <router-link class="list-group-item list-group-item-action" to="/fetch">
+                    Fetch
+                </router-link>
+                <router-link class="list-group-item list-group-item-action" to="/browse">
+                    Browse
+                </router-link>
+                <router-link class="list-group-item list-group-item-action" to="/about">
+                    About
+                </router-link>
+            </div>
+        </div>
+
+        <div class="col-9">
+            <transition
+                name="launcher-fade"
+                v-on:after-enter="top"
+                v-on:after-leave="top">
+                <router-view></router-view>
+            </transition>
+        </div>
+    </div>
 
 </div>

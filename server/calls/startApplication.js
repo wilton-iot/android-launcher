@@ -25,6 +25,18 @@ define([
     "use strict";
     var logger = new Logger(module.id);
 
+    /*
+            var confFile = repoPath + "conf/config.json";
+            var confStr = fs.readFile(confFile);
+            var ac = JSON.parse(confStr);
+            var lopts = ac.launcher;
+            if (!isObject(lopts)) {
+                throw new Error("Cannot load launcher options from app config," +
+                        " url: [" + opts.gitUrl + "]");
+            }
+     */
+
+
     return function(repoPath, launchOpts) {
         utils.hasProperties(launchOpts, ["tcpPort", "rootModuleName", "startupModule"]);
         logger.info("Is due to start application on path: [" + repoPath + "]");

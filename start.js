@@ -48,13 +48,15 @@ define([
             documentRoots: [
             {
                 resource: "/web",
-                zipPath: misc.wiltonConfig().wiltonHome + conf.server.stdlibFileName,
-                zipInnerPrefix: "android-launcher/web/",
+                dirPath: "/home/alex/projects/wilton/js/android-launcher/web",
+                //zipPath: misc.wiltonConfig().wiltonHome + conf.server.stdlibFileName,
+                //zipInnerPrefix: "android-launcher/web/",
                 cacheMaxAgeSeconds: conf.server.cacheMaxAgeSeconds
             },
             {
                 resource: "/stdlib",
-                zipPath: misc.wiltonConfig().wiltonHome + conf.server.stdlibFileName,
+                dirPath: "/home/alex/projects/wilton/js",
+                //zipPath: misc.wiltonConfig().wiltonHome + conf.server.stdlibFileName,
                 cacheMaxAgeSeconds: conf.server.cacheMaxAgeSeconds
             }]
         });

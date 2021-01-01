@@ -1,5 +1,5 @@
 /*
- * Copyright 2019, alex at staticlibs.net
+ * Copyright 2020, alex at staticlibs.net
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,15 +17,22 @@
 "use strict";
 
 define([
-    "lodash/forOwn",
-    "vue"
-], (forOwn, Vue) => {
+    "module",
+    "vue-require/store/commit",
+    "text!./about.html"
+], (module, commit, template) => {
 
-    return (state, saved) => {
-        forOwn(saved, (value, key) => {
-            if ("transient" !== key) {
-                Vue.set(state, key, value);
-            }
-        });
+    return {
+        template: template,
+
+        components: {
+        },
+
+        created() {
+            commit(null, "setHeaderLabel", "About");
+        },
+
+        methods: {
+        }
     };
 });

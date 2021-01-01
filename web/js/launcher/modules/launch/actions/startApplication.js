@@ -14,15 +14,27 @@
  * limitations under the License.
  */
 
-define([
-    "vue-require/websocket/backendcall"
-], function(backendcall) {
-    "use strict";
+"use strict";
 
-    return function(context, params) {
+define([
+    "vue-require/store/commit",
+    "vue-require/store/state",
+    "vue-require/websocket/backendcall"
+], (commit, state, backendcall) => {
+    const module = "launch";
+
+    return (context, params) => {
+        commit(module, "appLaunch_began");
         backendcall({
             module: "android-launcher/server/calls/startApplication",
-            args: [params.repoPath, params.options]
-        }, params.cb);
+            args: [] // todo
+        }, (err) => {
+            if (null !== err) {
+                console.error(err);
+                commit(module, "appLaunch_failed", err);
+                return;
+            }
+            commit(module, "appLaunch_succeeded");
+        });
     };
 });

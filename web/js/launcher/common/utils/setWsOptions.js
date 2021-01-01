@@ -14,15 +14,16 @@
  * limitations under the License.
  */
 
+"use strict";
+
 define([
     "vue-require/websocket/withSock",
     "wilton/utils",
     "json!/android-launcher/server/views/config"
-], function(withSock, utils, conf) {
-    "use strict";
+], (withSock, utils, conf) => {
 
     function onError(obj) {
-        var msg = obj;
+        let msg = obj;
         if ("object" === typeof(msg) &&
                 "undefined" !== msg.stack && "undefined" !== msg.message) {
             msg = utils.formatError(msg);
@@ -36,20 +37,19 @@ define([
     }
 
     function logger(obj) {
-        var msg = JSON.stringify(obj, null, 4);
+        const msg = JSON.stringify(obj, null, 4);
         console.log(msg);
     }
 
-    return function(context, cb) {
-        // sync call, no networking, only sets options
+    return () => {
+        // no networking, only sets options
         withSock(null, {
             url: conf.wsUrl,
             onError: onError,
             logger: logger,
             timeoutMillis: conf.wsTimeoutMillis
             // other possible options are forwarded to wsClient
-            // https://wilton-iot.github.io/wilton/docs/html/namespaceweb__wsClient.html#a9a7f2f55ba84b066190bb357f45a7d36
+            // https://wiltonruntime.github.io/wilton/docs/html/namespaceweb__wsClient.html#a9a7f2f55ba84b066190bb357f45a7d36
         });
-        cb();
     };
 });

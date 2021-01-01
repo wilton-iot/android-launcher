@@ -1,5 +1,5 @@
 /*
- * Copyright 2019, alex at staticlibs.net
+ * Copyright 2021, alex at staticlibs.net
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,30 +18,25 @@
 
 define([
     "vue",
-    "vue-require/store/state",
-    "launcher/common/utils/setWsOptions",
-    "launcher/common/utils/scrollToTop",
-    "text!./app.html"
-], (Vue, state, setWsOptions, scrollToTop, template) => {
+    "json!../launchStatus.json"
+], (Vue, status) => {
+    const module = "launch";
 
-    return Vue.component("App", {
-        template: template,
-
-        beforeCreate() {
-            setWsOptions();
+    return {
+        began(state) {
+            Vue.set(state, "status", status.IN_PROGRESS);
+            Vue.set(state, "alertMessage", "Launching ...");
         },
 
-        components: {
+        failed(state, error) {
+            Vue.set(state, "status", status.ERROR);
+            Vue.set(state, "alertMessage", `Launch failed, message: [${error}]`);
         },
 
-        computed: {
-            headerLabel: () => state(null).headerLabel
-        },
-
-        methods: {
-            top() {
-                scrollToTop();
-            }
+        succeeded(state, list) {
+            Vue.set(state, "status", status.SUCCESS);
+            Vue.set(state, "alertMessage", "Application started, opening UI ...");
         }
-    });
+
+    };
 });

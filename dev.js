@@ -1,5 +1,5 @@
 /*
- * Copyright 2019, alex at staticlibs.net
+ * Copyright 2020, alex at staticlibs.net
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,18 +14,20 @@
  * limitations under the License.
  */
 
-"use strict";
-
 define([
-    "lodash/forOwn",
-    "vue"
-], (forOwn, Vue) => {
+    "module",
+    "wilton/Logger",
+    "wilton/misc",
+    "./start"
+], function(module, Logger, misc, start) {
+    "use strict";
+    var logger = new Logger(module.id);
 
-    return (state, saved) => {
-        forOwn(saved, (value, key) => {
-            if ("transient" !== key) {
-                Vue.set(state, key, value);
-            }
-        });
+    return function() {
+        var server = start();
+        logger.info("Launcher started directly in development mode");
+        misc.waitForSignal();
+        server.stop();
+        logger.info("Launcher stopped");
     };
 });

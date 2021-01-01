@@ -14,33 +14,38 @@
  * limitations under the License.
  */
 
-define(function(require) {
-    "use strict";
+"use strict";
 
-    var Vue = require("vue");
-    var Vuex = require("vuex");
-    var storeHolder = require("vue-require/store/storeHolder");
+define((require) => {
+
+    const Vue = require("vue");
+    const Vuex = require("vuex");
+    const storeHolder = require("vue-require/store/storeHolder");
 
     Vue.use(Vuex);
 
-    var res = new Vuex.Store({
+    const res = new Vuex.Store({
         strict: true,
 
         actions: {
             loadAppState: require("./common/actions/loadAppState"),
-            openBackendConnection: require("./common/actions/openBackendConnection"),
             saveAppState: require("./common/actions/saveAppState")
         },
 
         modules: {
-            landing: require("./modules/landing/landingStore")
+            launch: require("./modules/launch/launchStore"),
+            fetch: require("./modules/fetch/fetchStore"),
+            browse: require("./modules/browse/browseStore")
         },
 
         mutations: {
-            updateStateFromSaved: require("./common/mutations/updateStateFromSaved")
+            updateStateFromSaved: require("./common/mutations/updateStateFromSaved"),
+
+            setHeaderLabel: (state, val) => Vue.set(state, "headerLabel", val)
         },
 
         state: {
+            headerLabel: ""
         }
     });
 

@@ -1,5 +1,5 @@
 /*
- * Copyright 2019, alex at staticlibs.net
+ * Copyright 2020, alex at staticlibs.net
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,15 +17,9 @@
 "use strict";
 
 define([
-    "lodash/forOwn",
-    "vue"
-], (forOwn, Vue) => {
+], () => {
 
-    return (state, saved) => {
-        forOwn(saved, (value, key) => {
-            if ("transient" !== key) {
-                Vue.set(state, key, value);
-            }
-        });
+    return () => {
+        window.scrollTo(0, 0);
     };
 });

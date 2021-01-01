@@ -14,23 +14,86 @@
  * limitations under the License.
  */
 
+"use strict";
+
 define([
+    // deps
     "module",
     "buffer",
-    "lodash/bind",
     "vue-require/store/commit",
     "vue-require/store/dispatch",
     "vue-require/store/state",
-    "text!./landing.html"
-], function (module, buffer, bind, commit, dispatch, state, template) {
-    "use strict";
+    // components
+    "launcher/components/alert/Alert",
+    "json!launcher/components/alert/alertStyles.json",
+    // local
+    "json!./launchStatus.json",
+    "text!./launch.html"
+], (
+        module, buffer, commit, dispatch, state,
+        Alert, alertStyles,
+        status, template
+) => {
 
     return {
         template: template,
 
-        created: function() {
-            dispatch("openBackendConnection", bind(function() {
-                dispatch("loadAppState", bind(function() {
+        beforeCreate() {
+            commit(null, "setHeaderLabel", "Launch");
+            commit(module, "initial");
+        },
+
+        components: {
+            "launcher-alert": new Alert([alertStyles.SUCCESS, alertStyles.DANGER])
+        },
+
+        computed: {
+
+            enabled: () => ![status.LOADING, status.IN_PROGRESS].includes(state(module).status),
+
+            alertMessage: () => state(module).alertMessage,
+
+            alertStyle () {
+                switch(state(module).status) {
+                    case status.LOADING: return alertStyles.SECONDARY; break;
+                    case status.IN_PROGRESS: return alertStyles.SECONDARY; break;
+                    case status.SUCCESS: return alertStyles.SUCCESS; break;
+                    case status.ERROR: return alertStyles.DANGER; break;
+                    default: return alertStyles.LIGHT;
+                }
+            },
+
+            appList: () => state(module).appList,
+
+            application: {
+                get: () => state(module).application,
+                set: (val) => commit(module, "setApplication", val)
+            },
+
+            launchAutomatically: {
+                get: () => state(module).launchAutomatically,
+                set: (val) => commit(module, "setLaunchAutomatically", val)
+            }
+        },
+
+        methods: {
+            launch() {
+                dispatch(module, "startApplication");
+            },
+
+            alertClosed() {
+                commit(module, "alertClosed");
+            }
+        },
+
+        mounted() {
+            dispatch(module, "loadList");
+        }
+/*
+
+        created() {
+            dispatch(null, "openBackendConnection", bind(function() {
+                dispatch(null, "loadAppState", bind(function() {
                     this.appStateLoaded = true;
                     this.gitUrl = state(module).gitUrl;
                     this.username = state(module).username;
@@ -61,7 +124,7 @@ define([
             }, this));
         },
 
-        data: function() {
+        data() {
             return {
                 gitUrl: "",
                 username: "",
@@ -89,20 +152,20 @@ define([
         },
 
         methods: {
-            stopLaunch: function() {
+            stopLaunch() {
                 this.settingsVisible = true;
                 this.stopButtonVisible = false;
                 this.isDueToLaunch = false;
                 this.setReadyState();
             },
 
-            launch: function() {
-                dispatch("landing/cloneOrPullGitRepo", bind(function(err, res) {
+            launch() {
+                dispatch(module, "cloneOrPullGitRepo", bind(function(err, res) {
                     if (null !== err) {
                         console.error(err);
                         this.setErrorState(err);
                     } else {
-                        dispatch("landing/startApplication", {
+                        dispatch(module, "startApplication", {
                             repoPath: res.repoPath,
                             options: res.options,
                             cb: bind(function(err) {
@@ -118,46 +181,22 @@ define([
                 }, this));
             },
 
-            saveAndLaunch: function() {
+            saveAndLaunch() {
                 this.setLaunchingState();
-                commit("landing/updateGitUrl", this.gitUrl);
-                commit("landing/updateUsername", this.username);
-                commit("landing/updatePassword", buffer.Buffer.from(this.password).toString("base64"));
-                commit("landing/updateGitBranch", this.gitBranch);
-                commit("landing/updateSkipUpdate", "true" === this.skipUpdate);
-                commit("landing/updateDeleteApp", "true" === this.deleteApp);
-                commit("landing/updateAutoLaunch", "true" === this.autoLaunch);
-                dispatch("saveAppState", bind(function() {
+                commit(module, "updateGitUrl", this.gitUrl);
+                commit(module, "updateUsername", this.username);
+                commit(module, "updatePassword", buffer.Buffer.from(this.password).toString("base64"));
+                commit(module, "updateGitBranch", this.gitBranch);
+                commit(module, "updateDirName", this.dirName);
+                commit(module, "updateSkipUpdate", "true" === this.skipUpdate);
+                commit(module, "updateDeleteApp", "true" === this.deleteApp);
+                commit(module, "updateAutoLaunch", "true" === this.autoLaunch);
+                dispatch(null, "saveAppState", bind(function() {
                     this.launch();
                 }, this));
             },
-
-            setReadyState: function() {
-                this.infoCss["alert-primary"] = false;
-                this.infoCss["alert-light"] = true;
-                this.infoText = "Ready to launch!";
-                this.settingsVisible = true;
-                this.enabled = true;
-            },
-
-            setLaunchingState: function() {
-                this.infoCss["alert-light"] = false;
-                this.infoCss["alert-danger"] = false;
-                this.infoCss["alert-primary"] = true;
-                this.infoText = "Launching ...";
-                this.enabled = false;
-                this.stopButtonEnabled = false;
-            },
-
-            setErrorState: function(err) {
-                this.settingsVisible = true;
-                this.stopButtonVisible = false;
-                this.isDueToLaunch = false;
-                this.infoCss["alert-primary"] = false;
-                this.infoCss["alert-danger"] = true;
-                this.infoText = err.replace(/\n/g, "\n<br>");
-                this.enabled = true;
-            }
         }
+ */
     };
+
 });

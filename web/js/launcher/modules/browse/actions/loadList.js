@@ -1,5 +1,5 @@
 /*
- * Copyright 2019, alex at staticlibs.net
+ * Copyright 2020, alex at staticlibs.net
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,25 +14,29 @@
  * limitations under the License.
  */
 
-define([
-    "vue-require/store/commit",
-    "vue-require/websocket/backendcall"
-], (commit, backendcall) => {
-    "use strict";
+"use strict";
 
-    return (context, cb) => {
+define([
+    "lodash/delay",
+    "vue-require/websocket/backendcall",
+    "vue-require/store/commit"
+], (delay, backendcall, commit) => {
+    const module = "browse";
+
+    return (context) => {
+        commit(module, "load_began");
         backendcall({
-            module: "android-launcher/server/calls/appState",
-            func: "load"
-        }, (err, saved) => {
+            module: "launcher/server/calls/fsOperations",
+            func: "listAppsAndLibs"
+        }, (err, res) => {
             if (null !== err) {
                 console.error(err);
+                commit(module, "load_failed", err);
                 return;
             }
-            commit(null, "updateStateFromSaved", saved);
-            if ("function" === typeof(cb)) {
-                cb();
-            }
+            delay(() => {
+                commit(module, "load_succeeded", res);
+            }, 500);
         });
     };
 });

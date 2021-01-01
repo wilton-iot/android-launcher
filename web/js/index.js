@@ -16,7 +16,7 @@
 
 // top level define required because enforceDefine is used
 
-define([], function() {
+define([], () => {
 
     // requirejs config, adjust as needed
     requirejs.config({
@@ -36,7 +36,7 @@ define([], function() {
 
     // load packages config and compat globals
     require(["json!wilton-requirejs/wilton-packages.json",
-            "wilton-requirejs/compatGlobals"], function(packages) {
+            "wilton-requirejs/compatGlobals"], (packages) => {
 
         // complete config
         requirejs.config({
@@ -44,7 +44,7 @@ define([], function() {
         });
 
         // init buffer
-        require(["buffer"], function(buffer) {
+        require(["buffer"], (buffer) => {
             // set global compat Buffer
             Buffer = buffer.Buffer;
 
@@ -54,7 +54,7 @@ define([], function() {
                 "launcher/router",
                 "launcher/store",
                 "launcher/app"
-            ], function(Vue, router, store, app) {
+            ], (Vue, router, store, app) => {
                 new Vue({
                     el: '#root',
                     router: router,
