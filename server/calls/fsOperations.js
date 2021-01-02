@@ -25,9 +25,8 @@ define([
 ], (module, Channel, fs, Logger, { wiltonConfig }) => {
     const logger = new Logger(module.id);
 
-    // todo: fixme
-//    const dir = wiltonConfig().wiltonHome;
-    const dir = "/home/alex/projects/wilton_other/tmp/";
+    const dir = wiltonConfig().wiltonHome;
+    //const dir = "/home/alex/projects/wilton_other/tmp/";
     const appsDir = dir + "apps/";
     const libsDir = dir + "libs/";
 

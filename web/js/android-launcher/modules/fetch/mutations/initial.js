@@ -34,10 +34,10 @@ define([
             Vue.set(state, "fetchType", ftypes.APPLICATION);
         }
         if (null === state.gitUrl) {
-            Vue.set(state, "gitUrl", "https://github.com/wilton-iot/wilton.js.git");
+            Vue.set(state, "gitUrl", "https://github.com/wiltonruntime/example_vueapp.git");
         }
         if (null === state.destination) {
-            Vue.set(state, "destination", "");
+            Vue.set(state, "destination", "vueapp");
         }
         if (null === state.username) {
             Vue.set(state, "username", "");

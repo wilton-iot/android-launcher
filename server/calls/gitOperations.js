@@ -29,9 +29,8 @@ define([
     var logger = new Logger(module.id);
 
     function prepareAppsDir(fetchType) {
-        // todo: fixme
-        // const base = wiltonConfig().wiltonHome;
-        const base = "/home/alex/projects/wilton_other/tmp/";
+        const base = wiltonConfig().wiltonHome;
+        //const base = "/home/alex/projects/wilton_other/tmp/";
         var dir = "application" === fetchType ? base + "apps/" : base + "libs/";
         if (!fs.exists(dir)) {
             fs.mkdir(dir);

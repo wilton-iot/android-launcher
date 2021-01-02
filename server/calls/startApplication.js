@@ -56,22 +56,14 @@ define([
         // save last launch opts
         appState.save(opts);
 
-        // todo: fixme
-        // const base = wiltonConfig().wiltonHome;
-        const base = "/home/alex/projects/wilton_other/tmp/";
-        const appDir = base + "apps/" + opts.application + "/";
-        const lc = loadLauncherConf(appDir);
-
-        /*
-        // strip ending slash
-        if (utils.endsWith(repoPath, "/")) {
-            repoPath = repoPath.substring(0, repoPath.length - 1);
-        }
+        const base = wiltonConfig().wiltonHome;
+        const appDir = base + "apps/" + opts.application;
+        const lc = loadLauncherConf(appDir + "/");
 
         var rorUrl = "http://127.0.0.1:" + conf.server.tcpPort + "/android-launcher/server/views/runOnRhino";
         runOnRhinoThread({
             module: "wilton/android/startAppService",
-            args: [appDir, lc, rorUrl]
+            args: [opts.application, lc, rorUrl]
         });
 
         logger.info("Application spawned, waiting for initialization ...");
@@ -81,7 +73,6 @@ define([
             timeoutMillis: 10000 
         });
         logger.info("Application initialization complete");
-        */
 
         return lc;
     };

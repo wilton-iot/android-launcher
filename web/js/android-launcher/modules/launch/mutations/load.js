@@ -32,7 +32,7 @@ define([
 
         failed(state, error) {
             Vue.set(state, "status", status.ERROR);
-            Vue.set(state, "alertMessage", `Git fetch failed, message: [${error}]`);
+            Vue.set(state, "alertMessage", `Load apps list failed, message: [${error}]`);
         },
 
         succeeded(state, res) {

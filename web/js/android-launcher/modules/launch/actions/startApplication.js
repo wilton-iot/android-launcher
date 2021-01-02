@@ -41,8 +41,7 @@ define([
             commit(module, "appLaunch_succeeded");
             delay(() => {
                 // redirect to app
-                // todo: enable me
-                //window.location.href = "http://127.0.0.1:" + launchConf.tcpPort;
+                window.location.href = "http://127.0.0.1:" + launchConf.tcpPort;
             }, 500);
         });
     };
