@@ -18,25 +18,22 @@
 
 define([
     "vue",
+    "json!../launchLabels.json",
     "json!../launchStatus.json"
-], (Vue, status) => {
-    const module = "launch";
+], (Vue, labels, status) => {
 
-    return {
-        began(state) {
-            Vue.set(state, "status", status.IN_PROGRESS);
-            Vue.set(state, "alertMessage", "Launching ...");
-        },
-
-        failed(state, error) {
-            Vue.set(state, "status", status.ERROR);
-            Vue.set(state, "alertMessage", `Launch failed, message: [${error}]`);
-        },
-
-        succeeded(state, list) {
-            Vue.set(state, "status", status.SUCCESS);
-            Vue.set(state, "alertMessage", "Application started, opening UI ...");
+    return (state) => {
+        Vue.set(state, "status", status.LOADING);
+        Vue.set(state, "alertMessage", labels.ALERT_MESSAGE_LOADING);
+        if (null === state.appList) {
+            Vue.set(state, "appList", []);
         }
-
+        if (null === state.application) {
+            Vue.set(state, "application", "");
+        }
+        if (null === state.autoLaunch) {
+            Vue.set(state, "autoLaunch", false);
+        }
+        Vue.set(state, "autoLaunchCanceled", false);
     };
 });

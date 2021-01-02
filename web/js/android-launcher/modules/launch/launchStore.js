@@ -25,12 +25,14 @@ define((require) => {
 
         actions: {
             startApplication: require("./actions/startApplication"),
-            loadList: require("./actions/loadList")
+            loadList: require("./actions/loadList"),
+            loadLastLaunched: require("./actions/loadLastLaunched")
         },
 
         mutations: {
             initial: require("./mutations/initial"),
             alertClosed: require("./mutations/alertClosed"),
+            lastLaunchLoaded: require("./mutations/lastLaunchLoaded"),
 
             load_began: require("./mutations/load").began,
             load_failed: require("./mutations/load").failed,
@@ -42,7 +44,8 @@ define((require) => {
 
             setAppList: (state, val) => Vue.set(state, "appList", val),
             setApplication: (state, val) => Vue.set(state, "application", val),
-            setLaunchAutomatically: (state, val) => Vue.set(state, "launchAutomatically", !!val)
+            setAutoLaunch: (state, val) => Vue.set(state, "autoLaunch", !!val),
+            setAutoLaunchCanceled: (state, val) => Vue.set(state, "autoLaunchCanceled", !!val)
         },
 
         state: {
@@ -50,7 +53,8 @@ define((require) => {
             alertMessage: null,
             appList: null,
             application: null,
-            launchAutomatically: false
+            autoLaunch: null,
+            autoLaunchCanceled: null
         }
 
     };

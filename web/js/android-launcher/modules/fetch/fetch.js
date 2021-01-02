@@ -25,10 +25,10 @@ define([
     "vue-require/store/dispatch",
     "vue-require/store/state",
     // components
-    "launcher/components/alert/Alert",
-    "json!launcher/components/alert/alertStyles.json",
+    "android-launcher/components/alert/Alert",
+    "json!android-launcher/components/alert/alertStyles.json",
     // local
-    "launcher/common/utils/scrollToTop",
+    "android-launcher/common/utils/scrollToTop",
     "json!./fetchStatus.json",
     "json!./fetchType.json",
     "text!./fetch.html"

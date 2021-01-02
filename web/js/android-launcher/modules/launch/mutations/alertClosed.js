@@ -1,5 +1,5 @@
 /*
- * Copyright 2019, alex at staticlibs.net
+ * Copyright 2021, alex at staticlibs.net
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,30 +18,12 @@
 
 define([
     "vue",
-    "vue-require/store/state",
-    "launcher/common/utils/setWsOptions",
-    "launcher/common/utils/scrollToTop",
-    "text!./app.html"
-], (Vue, state, setWsOptions, scrollToTop, template) => {
+    "json!../launchLabels.json",
+    "json!../launchStatus.json"
+], (Vue, labels, status) => {
 
-    return Vue.component("App", {
-        template: template,
-
-        beforeCreate() {
-            setWsOptions();
-        },
-
-        components: {
-        },
-
-        computed: {
-            headerLabel: () => state(null).headerLabel
-        },
-
-        methods: {
-            top() {
-                scrollToTop();
-            }
-        }
-    });
+    return (state) => {
+        Vue.set(state, "status", status.READY);
+        Vue.set(state, "alertMessage", labels.ALERT_MESSAGE_READY);
+    };
 });

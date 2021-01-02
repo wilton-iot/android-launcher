@@ -19,18 +19,18 @@
 define([
     // deps
     "module",
-    "buffer",
+    "lodash/isEmpty",
     "vue-require/store/commit",
     "vue-require/store/dispatch",
     "vue-require/store/state",
     // components
-    "launcher/components/alert/Alert",
-    "json!launcher/components/alert/alertStyles.json",
+    "android-launcher/components/alert/Alert",
+    "json!android-launcher/components/alert/alertStyles.json",
     // local
     "json!./launchStatus.json",
     "text!./launch.html"
 ], (
-        module, buffer, commit, dispatch, state,
+        module, isEmpty, commit, dispatch, state,
         Alert, alertStyles,
         status, template
 ) => {
@@ -49,14 +49,21 @@ define([
 
         computed: {
 
-            enabled: () => ![status.LOADING, status.IN_PROGRESS].includes(state(module).status),
+            enabled: () => ![
+                status.LOADING,
+                status.IN_PROGRESS,
+                status.AUTO_LAUNCH,
+                status.LAUNCHED
+            ].includes(state(module).status),
 
             alertMessage: () => state(module).alertMessage,
 
-            alertStyle () {
+            alertStyle() {
                 switch(state(module).status) {
                     case status.LOADING: return alertStyles.SECONDARY; break;
                     case status.IN_PROGRESS: return alertStyles.SECONDARY; break;
+                    case status.AUTO_LAUNCH: return alertStyles.SECONDARY; break;
+                    case status.LAUNCHED: return alertStyles.SUCCESS; break;
                     case status.SUCCESS: return alertStyles.SUCCESS; break;
                     case status.ERROR: return alertStyles.DANGER; break;
                     default: return alertStyles.LIGHT;
@@ -70,9 +77,19 @@ define([
                 set: (val) => commit(module, "setApplication", val)
             },
 
-            launchAutomatically: {
-                get: () => state(module).launchAutomatically,
-                set: (val) => commit(module, "setLaunchAutomatically", val)
+            autoLaunch: {
+                get: () => state(module).autoLaunch,
+                set: (val) => commit(module, "setAutoLaunch", val)
+            },
+
+            showCancelButton: () => status.AUTO_LAUNCH === state(module).status,
+
+            autoLaunchCanceled: () => state(module).autoLaunchCanceled,
+
+            launchButtonEnabled() {
+                return status.READY === state(module).status && 
+                        this.enabled && 
+                        !isEmpty(this.application);
             }
         },
 
@@ -83,6 +100,10 @@ define([
 
             alertClosed() {
                 commit(module, "alertClosed");
+            },
+
+            cancelAutoLaunch() {
+                commit(module, "setAutoLaunchCanceled", true);
             }
         },
 

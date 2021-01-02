@@ -17,24 +17,33 @@
 "use strict";
 
 define([
+    "lodash/delay",
     "vue-require/store/commit",
     "vue-require/store/state",
     "vue-require/websocket/backendcall"
-], (commit, state, backendcall) => {
+], (delay, commit, state, backendcall) => {
     const module = "launch";
 
-    return (context, params) => {
+    return (context) => {
         commit(module, "appLaunch_began");
         backendcall({
             module: "android-launcher/server/calls/startApplication",
-            args: [] // todo
-        }, (err) => {
+            args: [{
+                application: state(module).application,
+                autoLaunch: state(module).autoLaunch
+            }]
+        }, (err, launchConf) => {
             if (null !== err) {
                 console.error(err);
                 commit(module, "appLaunch_failed", err);
                 return;
             }
             commit(module, "appLaunch_succeeded");
+            delay(() => {
+                // redirect to app
+                // todo: enable me
+                //window.location.href = "http://127.0.0.1:" + launchConf.tcpPort;
+            }, 500);
         });
     };
 });

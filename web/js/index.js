@@ -25,7 +25,7 @@ define([], () => {
         nodeIdCompat: true,
         waitSeconds: 15,
         paths: {
-            "launcher": "/web/js/launcher"
+            "android-launcher": "/web/js/android-launcher"
         },
         // these plugins are used to load wilton-packages.json
         packages: [
@@ -51,9 +51,9 @@ define([], () => {
             // start app
             require([
                 "vue",
-                "launcher/router",
-                "launcher/store",
-                "launcher/app"
+                "android-launcher/router",
+                "android-launcher/store",
+                "android-launcher/app"
             ], (Vue, router, store, app) => {
                 new Vue({
                     el: '#root',

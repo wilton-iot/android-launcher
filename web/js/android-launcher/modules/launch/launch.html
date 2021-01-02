@@ -17,6 +17,18 @@
 <div class="row">
     <div class="col">
 
+        <div class="row mt-2 mb-4"
+                v-show="showCancelButton">
+            <div class="col">
+                <button
+                    type="button"
+                    class="btn btn-lg btn-danger btn-block"
+                    v-bind:disabled="autoLaunchCanceled"
+                    v-on:click.stop.prevent="cancelAutoLaunch()">
+                    Cancel Launch
+                </button>
+            </div>
+        </div>
 
         <div class="row">
             <div class="col">
@@ -34,7 +46,7 @@
                 </label>
                 <select class="form-control form-control-lg"
                         v-bind:disabled="!enabled"
-                        v-bind:value="application">
+                        v-model="application">
                     <option value="">[Choose]</option>
                     <option
                             v-for="app in appList"
@@ -55,13 +67,13 @@
                 </label>
                 <select class="form-control form-control-lg"
                         v-bind:disabled="!enabled"
-                        v-bind:value="launchAutomatically">
+                        v-model="autoLaunch">
                     <option value="false">No</option>
                     <option value="true">Yes</option>
                 </select>
                 <small class="form-text text-muted">
                     With this option enabled selected application will start automatically
-                    without requiering user interaction with Launcher UI.
+                    without requiring user interaction with Launcher UI.
                 </small>
             </div>
         </div>
@@ -73,7 +85,7 @@
                 <button
                     type="button"
                     class="btn btn-lg btn-secondary btn-block"
-                    v-bind:disabled="!enabled"
+                    v-bind:disabled="!launchButtonEnabled"
                     v-on:click.stop.prevent="launch()">
                     Launch
                 </button>

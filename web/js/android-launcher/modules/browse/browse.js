@@ -23,8 +23,8 @@ define([
     "vue-require/store/dispatch",
     "vue-require/store/state",
     // components
-    "launcher/components/alert/Alert",
-    "json!launcher/components/alert/alertStyles.json",
+    "android-launcher/components/alert/Alert",
+    "json!android-launcher/components/alert/alertStyles.json",
     // local
     "json!./browseStatus.json",
     "json!./entryType.json",

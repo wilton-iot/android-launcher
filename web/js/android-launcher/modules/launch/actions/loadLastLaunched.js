@@ -19,24 +19,33 @@
 define([
     "lodash/delay",
     "vue-require/websocket/backendcall",
-    "vue-require/store/commit"
-], (delay, backendcall, commit) => {
+    "vue-require/store/commit",
+    "vue-require/store/dispatch",
+    "vue-require/store/state"
+], (delay, backendcall, commit, dispatch, state) => {
     const module = "launch";
 
     return (context) => {
-        commit(module, "load_began");
         backendcall({
-            module: "launcher/server/calls/fsOperations",
-            func: "listApps"
-        }, (err, res) => {
+            module: "android-launcher/server/calls/appState",
+            func: "load"
+        }, (err, st) => {
             if (null !== err) {
                 console.error(err);
                 commit(module, "load_failed", err);
                 return;
             }
-            delay(() => {
-                commit(module, "load_succeeded", res);
-            }, 500);
+            commit(module, "lastLaunchLoaded", st);
+            if (true === st.autoLaunch) {
+                delay(() => {
+                    if (!state(module).autoLaunchCanceled) {
+                        dispatch(module, "startApplication");
+                    } else {
+                        commit(module, "alertClosed");
+                    }
+                }, 3000);
+            }
         });
     };
 });
+ 

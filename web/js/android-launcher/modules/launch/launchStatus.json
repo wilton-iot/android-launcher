@@ -3,5 +3,7 @@
     "READY": "READY",
     "IN_PROGRESS": "IN_PROGRESS",
     "SUCCESS": "SUCCESS",
-    "ERROR": "ERROR"
+    "ERROR": "ERROR",
+    "AUTO_LAUNCH": "AUTO_LAUNCH",
+    "LAUNCHED": "LAUNCHED"
 }

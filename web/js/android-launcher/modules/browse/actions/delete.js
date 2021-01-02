@@ -19,23 +19,26 @@
 define([
     "lodash/delay",
     "vue-require/websocket/backendcall",
-    "vue-require/store/commit"
-], (delay, backendcall, commit) => {
+    "vue-require/store/commit",
+    "vue-require/store/dispatch",
+    "json!../entryType.json"
+], (delay, backendcall, commit, dispatch, etype) => {
     const module = "browse";
 
-    return (context) => {
-        commit(module, "load_began");
+    return (context, {name, entryType}) => {
+        commit(module, "delete_began");
         backendcall({
-            module: "launcher/server/calls/fsOperations",
-            func: "listAppsAndLibs"
-        }, (err, res) => {
+            module: "android-launcher/server/calls/fsOperations",
+            func: etype.APPLICATION === entryType ? "deleteApp" : "deleteLib",
+            args: [name]
+        }, (err) => {
             if (null !== err) {
                 console.error(err);
-                commit(module, "load_failed", err);
+                commit(module, "delete_failed", err);
                 return;
             }
             delay(() => {
-                commit(module, "load_succeeded", res);
+                dispatch(module, "loadList");
             }, 500);
         });
     };

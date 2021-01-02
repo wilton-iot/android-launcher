@@ -17,13 +17,21 @@
 "use strict";
 
 define([
+    "lodash/isEmpty",
     "vue",
-    "json!../launchLabels.json",
     "json!../launchStatus.json"
-], (Vue, labels, status) => {
+], (isEmpty, Vue, status) => {
 
-    return (state) => {
-        Vue.set(state, "status", status.INITIAL);
-        Vue.set(state, "alertMessage", labels.ALERT_MESSAGE_INITIAL);
+    return (state, st) => {
+        if (isEmpty(state.application) && !isEmpty(st.application)) {
+            Vue.set(state, "application", st.application);
+        }
+        if (false === state.autoLaunch && true === st.autoLaunch) {
+            Vue.set(state, "autoLaunch", true);
+        }
+        if (true === st.autoLaunch) {
+            Vue.set(state, "status", status.AUTO_LAUNCH);
+            Vue.set(state, "alertMessage", `Is due to launch application, name: [${st.application}]`);
+        }
     };
 });

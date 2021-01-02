@@ -1,5 +1,5 @@
 /*
- * Copyright 2020, alex at staticlibs.net
+ * Copyright 2021, alex at staticlibs.net
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,25 +17,33 @@
 "use strict";
 
 define([
+    "lodash/delay",
+    "lodash/isEmpty",
     "vue-require/websocket/backendcall",
     "vue-require/store/commit",
+    "vue-require/store/dispatch",
     "vue-require/store/state"
-], (backendcall, commit, state) => {
-    const module = "fetch";
+], (delay, isEmpty, backendcall, commit, dispatch, state) => {
+    const module = "launch";
 
     return (context) => {
-        commit(module, "fetchRepo_began");
+        commit(module, "load_began");
         backendcall({
-            module: "launcher/server/calls/gitOperations",
-            func: "cloneOrPull",
-            args: [state(module)]
-        }, (err) => {
+            module: "android-launcher/server/calls/fsOperations",
+            func: "listApps"
+        }, (err, res) => {
             if (null !== err) {
                 console.error(err);
-                commit(module, "fetchRepo_failed", err);
+                commit(module, "load_failed", err);
                 return;
             }
-            commit(module, "fetchRepo_succeeded");
+            delay(() => {
+                const initial = isEmpty(state(module).appList);
+                commit(module, "load_succeeded", res);
+                if (initial) {
+                    dispatch(module, "loadLastLaunched");
+                }
+            }, 500);
         });
     };
 });

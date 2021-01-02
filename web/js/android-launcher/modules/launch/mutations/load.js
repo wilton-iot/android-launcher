@@ -38,7 +38,11 @@ define([
         succeeded(state, res) {
             Vue.set(state, "status", status.READY);
             Vue.set(state, "alertMessage", labels.ALERT_MESSAGE_READY);
-            commit(module, "setAppList", res.map(_ => _.name));
+            const list = res.map(_ => _.name);
+            if (!list.includes(state.application)) {
+                Vue.set(state, "application", "");
+            }
+            commit(module, "setAppList", list);
         }
 
     };
